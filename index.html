@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Memories Gallery 📸</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        /* Glassmorphism styling */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-30 glass transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/30">
+                    <i class="fa-solid font-bold fa-camera-retro text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">
+                        Our Family Memories
+                    </h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">Project 23 • Captured Moments</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <!-- Theme Toggle Button -->
+                <button id="themeToggle" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-all duration-200" title="Toggle Theme">
+                    <i class="fa-solid fa-moon text-lg hidden dark:block"></i>
+                    <i class="fa-solid fa-sun text-lg block dark:hidden text-amber-500"></i>
+                </button>
+
+                <!-- Upload Photo Button -->
+                <button id="openUploadModal" class="flex items-center gap-2 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white px-4 py-2.5 rounded-xl font-medium shadow-md shadow-sky-500/20 active:scale-95 transition-all duration-200">
+                    <i class="fa-solid fa-plus"></i>
+                    <span class="hidden sm:inline">Add Photo</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Controls Bar: Category Filters & Search -->
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+            <!-- Category Tabs -->
+            <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar" id="categoryFilters">
+                <button data-category="all" class="filter-btn active bg-sky-500 text-white px-4 py-2 rounded-xl font-medium text-sm transition-all whitespace-nowrap shadow-sm">
+                    ✨ All Moments
+                </button>
+                <button data-category="memories" class="filter-btn bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 px-4 py-2 rounded-xl font-medium text-sm transition-all whitespace-nowrap">
+                    ❤️ Memories
+                </button>
+                <button data-category="trips" class="filter-btn bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 px-4 py-2 rounded-xl font-medium text-sm transition-all whitespace-nowrap">
+                    ✈️ Trips
+                </button>
+                <button data-category="celebrations" class="filter-btn bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 px-4 py-2 rounded-xl font-medium text-sm transition-all whitespace-nowrap">
+                    🎉 Celebrations
+                </button>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="relative w-full md:w-72">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="text" id="searchInput" placeholder="Search caption or tags..." class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm transition-all">
+            </div>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Dynamic Content inserted via JavaScript -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
+            <div class="w-20 h-20 bg-slate-100 dark:bg-slate-900 text-slate-400 rounded-full flex items-center justify-center text-3xl mb-4">
+                <i class="fa-regular fa-image"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-300">No photos found</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Try switching filters or add a new family photo!</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-sm text-slate-500 dark:text-slate-400">
+        <p>Created with ❤️ for Project 23 • Family Gallery</p>
+    </footer>
+
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl transform scale-95 transition-transform duration-300" id="uploadModalContent">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Add New Photo</h2>
+                <button id="closeUploadModal" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <form id="uploadForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Upload Image</label>
+                    <div class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-4 text-center cursor-pointer hover:border-sky-500 transition-colors" id="dropZone">
+                        <input type="file" id="imageInput" accept="image/*" class="hidden">
+                        <div id="previewContainer" class="hidden mb-2">
+                            <img id="imagePreview" src="" alt="Preview" class="max-h-40 mx-auto rounded-lg object-cover">
+                        </div>
+                        <div id="uploadPlaceholder" class="space-y-1">
+                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-sky-500"></i>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Click or drag image here to upload</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="captionInput" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Caption / Story</label>
+                    <input type="text" id="captionInput" placeholder="e.g., Summer Vacation in Goa" required class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
+                </div>
+
+                <div>
+                    <label for="categoryInput" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Category</label>
+                    <select id="categoryInput" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
+                        <option value="memories">Memories</option>
+                        <option value="trips">Trips</option>
+                        <option value="celebrations">Celebrations</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="dateInput" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Date</label>
+                    <input type="date" id="dateInput" required class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
+                </div>
+
+                <div class="pt-2 flex justify-end gap-3">
+                    <button type="button" id="cancelUpload" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-sm font-medium shadow-md shadow-sky-500/20">
+                        Save Photo
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightboxModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <button id="closeLightbox" class="absolute top-5 right-5 text-white/80 hover:text-white text-2xl z-10 p-2">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <button id="prevBtn" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all">
+            <i class="fa-solid fa-chevron-left text-lg"></i>
+        </button>
+        <button id="nextBtn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all">
+            <i class="fa-solid fa-chevron-right text-lg"></i>
+        </button>
+
+        <div class="max-w-4xl max-h-[90vh] flex flex-col items-center">
+            <img id="lightboxImg" src="" alt="Full view" class="max-h-[75vh] w-auto max-w-full rounded-lg object-contain shadow-2xl">
+            <div class="mt-4 text-center text-white space-y-1">
+                <p id="lightboxCaption" class="text-lg font-semibold"></p>
+                <div class="flex items-center justify-center gap-4 text-xs text-slate-400">
+                    <span id="lightboxCategory" class="uppercase tracking-wider font-semibold text-sky-400"></span>
+                    <span>•</span>
+                    <span id="lightboxDate"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Sample Initial Data
+        const initialPhotos = [
+            {
+                id: 1,
+                url: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80',
+                caption: 'Family Weekend Picnic in the Park',
+                category: 'memories',
+                date: '2025-05-14'
+            },
+            {
+                id: 2,
+                url: 'https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?auto=format&fit=crop&w=800&q=80',
+                caption: 'Road Trip Across Mountains',
+                category: 'trips',
+                date: '2025-08-20'
+            },
+            {
+                id: 3,
+                url: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80',
+                caption: 'Grandma\'s 70th Birthday Party',
+                category: 'celebrations',
+                date: '2025-11-05'
+            },
+            {
+                id: 4,
+                url: 'https://images.unsplash.com/photo-1475503572774-15a45e5d60b9?auto=format&fit=crop&w=800&q=80',
+                caption: 'Sunset Beach Walk',
+                category: 'trips',
+                date: '2026-01-12'
+            },
+            {
+                id: 5,
+                url: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80',
+                caption: 'Diwali Celebration at Home',
+                category: 'celebrations',
+                date: '2025-10-28'
+            },
+            {
+                id: 6,
+                url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80',
+                caption: 'Casual Sunday Gathering',
+                category: 'memories',
+                date: '2026-02-18'
+            }
+        ];
+
+        // State Management
+        let photos = JSON.parse(localStorage.getItem('family_photos')) || initialPhotos;
+        let activeCategory = 'all';
+        let searchQuery = '';
+        let currentLightboxIndex = 0;
+        let selectedImageData = null;
+
+        // DOM Elements
+        const galleryGrid = document.getElementById('galleryGrid');
+        const emptyState = document.getElementById('emptyState');
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const themeToggle = document.getElementById('themeToggle');
+
+        // Modal Elements
+        const uploadModal = document.getElementById('uploadModal');
+        const uploadModalContent = document.getElementById('uploadModalContent');
+        const openUploadBtn = document.getElementById('openUploadModal');
+        const closeUploadBtn = document.getElementById('closeUploadModal');
+        const cancelUploadBtn = document.getElementById('cancelUpload');
+        const uploadForm = document.getElementById('uploadForm');
+        const dropZone = document.getElementById('dropZone');
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewContainer = document.getElementById('previewContainer');
+        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+
+        // Lightbox Elements
+        const lightboxModal = document.getElementById('lightboxModal');
+        const closeLightbox = document.getElementById('closeLightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxCaption = document.getElementById('lightboxCaption');
+        const lightboxCategory = document.getElementById('lightboxCategory');
+        const lightboxDate = document.getElementById('lightboxDate');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        // Theme Toggle Handler
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        // Initialize Theme
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // Save Photos to Storage
+        function savePhotos() {
+            localStorage.setItem('family_photos', JSON.stringify(photos));
+        }
+
+        // Render Gallery Cards
+        function renderGallery() {
+            galleryGrid.innerHTML = '';
+
+            const filteredPhotos = photos.filter(photo => {
+                const matchesCategory = activeCategory === 'all' || photo.category === activeCategory;
+                const matchesSearch = photo.caption.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filteredPhotos.length === 0) {
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+            }
+
+            filteredPhotos.forEach((photo, index) => {
+                const card = document.createElement('div');
+                card.className = 'group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col cursor-pointer';
+
+                card.innerHTML = `
+                    <div class="relative overflow-hidden aspect-[4/3] bg-slate-100 dark:bg-slate-800">
+                        <img src="${photo.url}" alt="${photo.caption}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Image+Not+Found'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <span class="text-xs bg-sky-500 text-white font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">${photo.category}</span>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-semibold text-slate-800 dark:text-slate-100 line-clamp-1 group-hover:text-sky-500 transition-colors">${photo.caption}</h3>
+                            <p class="text-xs text-slate-400 dark:text-slate-500 mt-1"><i class="fa-regular fa-calendar text-xs mr-1"></i>${photo.date}</p>
+                        </div>
+                    </div>
+                `;
+
+                card.addEventListener('click', () => {
+                    openLightbox(filteredPhotos, index);
+                });
+
+                galleryGrid.appendChild(card);
+            });
+        }
+
+        // Category Filtering
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('active', 'bg-sky-500', 'text-white', 'shadow-sm');
+                    b.classList.add('bg-white', 'dark:bg-slate-900', 'border', 'border-slate-200', 'dark:border-slate-800', 'text-slate-600', 'dark:text-slate-300');
+                });
+
+                btn.classList.add('active', 'bg-sky-500', 'text-white', 'shadow-sm');
+                btn.classList.remove('bg-white', 'dark:bg-slate-900', 'border', 'border-slate-200', 'dark:border-slate-800', 'text-slate-600', 'dark:text-slate-300');
+
+                activeCategory = btn.dataset.category;
+                renderGallery();
+            });
+        });
+
+        // Search Input Event
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderGallery();
+        });
+
+        // Upload Modal Handlers
+        function openModal() {
+            uploadModal.classList.remove('hidden');
+            setTimeout(() => {
+                uploadModal.classList.remove('opacity-0');
+                uploadModalContent.classList.remove('scale-95');
+                uploadModalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            uploadModal.classList.add('opacity-0');
+            uploadModalContent.classList.remove('scale-100');
+            uploadModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                uploadModal.classList.add('hidden');
+                resetUploadForm();
+            }, 300);
+        }
+
+        function resetUploadForm() {
+            uploadForm.reset();
+            selectedImageData = null;
+            previewContainer.classList.add('hidden');
+            uploadPlaceholder.classList.remove('hidden');
+        }
+
+        openUploadBtn.addEventListener('click', openModal);
+        closeUploadBtn.addEventListener('click', closeModal);
+        cancelUploadBtn.addEventListener('click', closeModal);
+
+        // Image Selection and Drop Zone
+        dropZone.addEventListener('click', () => imageInput.click());
+
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    selectedImageData = evt.target.result;
+                    imagePreview.src = selectedImageData;
+                    previewContainer.classList.remove('hidden');
+                    uploadPlaceholder.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Form Submit
+        uploadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const caption = document.getElementById('captionInput').value;
+            const category = document.getElementById('categoryInput').value;
+            const date = document.getElementById('dateInput').value;
+
+            const imageUrl = selectedImageData || 'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80';
+
+            const newPhoto = {
+                id: Date.now(),
+                url: imageUrl,
+                caption: caption,
+                category: category,
+                date: date
+            };
+
+            photos.unshift(newPhoto);
+            savePhotos();
+            renderGallery();
+            closeModal();
+        });
+
+        // Lightbox Functions
+        let activeGallerySet = [];
+
+        function openLightbox(gallerySet, index) {
+            activeGallerySet = gallerySet;
+            currentLightboxIndex = index;
+            updateLightboxContent();
+
+            lightboxModal.classList.remove('hidden');
+            setTimeout(() => {
+                lightboxModal.classList.remove('opacity-0');
+            }, 10);
+        }
+
+        function updateLightboxContent() {
+            const photo = activeGallerySet[currentLightboxIndex];
+            lightboxImg.src = photo.url;
+            lightboxCaption.textContent = photo.caption;
+            lightboxCategory.textContent = photo.category;
+            lightboxDate.textContent = photo.date;
+        }
+
+        function closeLightboxModal() {
+            lightboxModal.classList.add('opacity-0');
+            setTimeout(() => {
+                lightboxModal.classList.add('hidden');
+            }, 300);
+        }
+
+        closeLightbox.addEventListener('click', closeLightboxModal);
+
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentLightboxIndex = (currentLightboxIndex - 1 + activeGallerySet.length) % activeGallerySet.length;
+            updateLightboxContent();
+        });
+
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentLightboxIndex = (currentLightboxIndex + 1) % activeGallerySet.length;
+            updateLightboxContent();
+        });
+
+        // Keyboard Controls
+        document.addEventListener('keydown', (e) => {
+            if (!lightboxModal.classList.contains('hidden')) {
+                if (e.key === 'Escape') closeLightboxModal();
+                if (e.key === 'ArrowLeft') prevBtn.click();
+                if (e.key === 'ArrowRight') nextBtn.click();
+            }
+        });
+
+        // Set Default Date in Form
+        document.getElementById('dateInput').valueAsDate = new Date();
+
+        // Initial Render
+        renderGallery();
+    </script>
+</body>
+</html>
