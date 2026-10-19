@@ -106,10 +106,7 @@
             <!-- Category Tabs -->
             <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar" id="categoryFilters">
                 <button data-category="all" class="filter-btn active bg-sky-500 text-white px-4 py-2 rounded-xl font-medium text-sm transition-all whitespace-nowrap shadow-sm">
-                    ✨ All Moments
-                </button>
-                <button data-category="memories" class="filter-btn bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 px-4 py-2 rounded-xl font-medium text-sm transition-all whitespace-nowrap">
-                    ❤️ Memories
+                    ✨ All
                 </button>
                 <button data-category="trips" class="filter-btn bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 px-4 py-2 rounded-xl font-medium text-sm transition-all whitespace-nowrap">
                     ✈️ Trips
@@ -117,12 +114,15 @@
                 <button data-category="celebrations" class="filter-btn bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 px-4 py-2 rounded-xl font-medium text-sm transition-all whitespace-nowrap">
                     🎉 Celebrations
                 </button>
+                <button data-category="daily" class="filter-btn bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 px-4 py-2 rounded-xl font-medium text-sm transition-all whitespace-nowrap">
+                    ☕ Daily
+                </button>
             </div>
 
             <!-- Search Bar -->
             <div class="relative w-full md:w-72">
                 <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                <input type="text" id="searchInput" placeholder="Search caption or tags..." class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm transition-all">
+                <input type="text" id="searchInput" placeholder="Search caption..." class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm transition-all">
             </div>
         </div>
 
@@ -146,7 +146,7 @@
         <p>Created with ❤️ for Project 23 • Family Gallery</p>
     </footer>
 
-    <!-- Upload Modal -->
+    <!-- Add Photo Modal -->
     <div id="uploadModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl transform scale-95 transition-transform duration-300" id="uploadModalContent">
             <div class="flex items-center justify-between mb-4">
@@ -158,30 +158,41 @@
 
             <form id="uploadForm" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Upload Image</label>
-                    <div class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-4 text-center cursor-pointer hover:border-sky-500 transition-colors" id="dropZone">
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Image Source</label>
+                    <div class="flex gap-2 mb-2">
+                        <button type="button" id="tabFileUpload" class="flex-1 py-1.5 text-xs font-semibold rounded-lg bg-sky-500 text-white transition-all">Upload File</button>
+                        <button type="button" id="tabUrlUpload" class="flex-1 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 transition-all">Image URL</button>
+                    </div>
+
+                    <!-- File Input Box -->
+                    <div id="fileInputContainer" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-4 text-center cursor-pointer hover:border-sky-500 transition-colors">
                         <input type="file" id="imageInput" accept="image/*" class="hidden">
                         <div id="previewContainer" class="hidden mb-2">
                             <img id="imagePreview" src="" alt="Preview" class="max-h-40 mx-auto rounded-lg object-cover">
                         </div>
                         <div id="uploadPlaceholder" class="space-y-1">
                             <i class="fa-solid fa-cloud-arrow-up text-3xl text-sky-500"></i>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Click or drag image here to upload</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Click or drag image file here</p>
                         </div>
+                    </div>
+
+                    <!-- URL Input Box -->
+                    <div id="urlInputContainer" class="hidden">
+                        <input type="url" id="imageUrlInput" placeholder="https://example.com/photo.jpg" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
                     </div>
                 </div>
 
                 <div>
                     <label for="captionInput" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Caption / Story</label>
-                    <input type="text" id="captionInput" placeholder="e.g., Summer Vacation in Goa" required class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
+                    <input type="text" id="captionInput" placeholder="e.g., Trip to Manali" required class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
                 </div>
 
                 <div>
                     <label for="categoryInput" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Category</label>
                     <select id="categoryInput" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
-                        <option value="memories">Memories</option>
                         <option value="trips">Trips</option>
                         <option value="celebrations">Celebrations</option>
+                        <option value="daily">Daily</option>
                     </select>
                 </div>
 
@@ -229,58 +240,49 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // Sample Initial Data
+        // Initial Mock Data
         const initialPhotos = [
             {
                 id: 1,
                 url: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80',
                 caption: 'Family Weekend Picnic in the Park',
-                category: 'memories',
-                date: '2025-05-14'
+                category: 'daily',
+                date: '2025-05-14',
+                liked: false
             },
             {
                 id: 2,
                 url: 'https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?auto=format&fit=crop&w=800&q=80',
                 caption: 'Road Trip Across Mountains',
                 category: 'trips',
-                date: '2025-08-20'
+                date: '2025-08-20',
+                liked: true
             },
             {
                 id: 3,
                 url: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80',
-                caption: 'Grandma\'s 70th Birthday Party',
+                caption: 'Grandma\'s Birthday Party',
                 category: 'celebrations',
-                date: '2025-11-05'
+                date: '2025-11-05',
+                liked: false
             },
             {
                 id: 4,
                 url: 'https://images.unsplash.com/photo-1475503572774-15a45e5d60b9?auto=format&fit=crop&w=800&q=80',
                 caption: 'Sunset Beach Walk',
                 category: 'trips',
-                date: '2026-01-12'
-            },
-            {
-                id: 5,
-                url: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80',
-                caption: 'Diwali Celebration at Home',
-                category: 'celebrations',
-                date: '2025-10-28'
-            },
-            {
-                id: 6,
-                url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80',
-                caption: 'Casual Sunday Gathering',
-                category: 'memories',
-                date: '2026-02-18'
+                date: '2026-01-12',
+                liked: false
             }
         ];
 
         // State Management
-        let photos = JSON.parse(localStorage.getItem('family_photos')) || initialPhotos;
+        let photos = JSON.parse(localStorage.getItem('family_photos_v2')) || initialPhotos;
         let activeCategory = 'all';
         let searchQuery = '';
         let currentLightboxIndex = 0;
         let selectedImageData = null;
+        let uploadType = 'file'; // 'file' or 'url'
 
         // DOM Elements
         const galleryGrid = document.getElementById('galleryGrid');
@@ -296,8 +298,14 @@
         const closeUploadBtn = document.getElementById('closeUploadModal');
         const cancelUploadBtn = document.getElementById('cancelUpload');
         const uploadForm = document.getElementById('uploadForm');
-        const dropZone = document.getElementById('dropZone');
+        
+        // Input Controls
+        const tabFileUpload = document.getElementById('tabFileUpload');
+        const tabUrlUpload = document.getElementById('tabUrlUpload');
+        const fileInputContainer = document.getElementById('fileInputContainer');
+        const urlInputContainer = document.getElementById('urlInputContainer');
         const imageInput = document.getElementById('imageInput');
+        const imageUrlInput = document.getElementById('imageUrlInput');
         const imagePreview = document.getElementById('imagePreview');
         const previewContainer = document.getElementById('previewContainer');
         const uploadPlaceholder = document.getElementById('uploadPlaceholder');
@@ -319,17 +327,35 @@
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         });
 
-        // Initialize Theme
         if (localStorage.getItem('theme') === 'light') {
             document.documentElement.classList.remove('dark');
         }
 
-        // Save Photos to Storage
+        // Save State
         function savePhotos() {
-            localStorage.setItem('family_photos', JSON.stringify(photos));
+            localStorage.setItem('family_photos_v2', JSON.stringify(photos));
         }
 
-        // Render Gallery Cards
+        // Delete Photo Function
+        function deletePhoto(id, e) {
+            e.stopPropagation(); // prevent lightbox opening
+            photos = photos.filter(p => p.id !== id);
+            savePhotos();
+            renderGallery();
+        }
+
+        // Like Photo Function
+        function toggleLike(id, e) {
+            e.stopPropagation();
+            const photo = photos.find(p => p.id === id);
+            if (photo) {
+                photo.liked = !photo.liked;
+                savePhotos();
+                renderGallery();
+            }
+        }
+
+        // Render Gallery
         function renderGallery() {
             galleryGrid.innerHTML = '';
 
@@ -354,15 +380,27 @@
                 card.innerHTML = `
                     <div class="relative overflow-hidden aspect-[4/3] bg-slate-100 dark:bg-slate-800">
                         <img src="${photo.url}" alt="${photo.caption}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Image+Not+Found'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                            <span class="text-xs bg-sky-500 text-white font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">${photo.category}</span>
+                        
+                        <!-- Top Actions (Delete Button & Category Badge) -->
+                        <div class="absolute top-3 left-3 right-3 flex justify-between items-center z-10">
+                            <span class="text-xs bg-black/50 backdrop-blur-md text-white font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">${photo.category}</span>
+                            <button onclick="deletePhoto(${photo.id}, event)" class="p-2 rounded-full bg-rose-500/80 hover:bg-rose-600 text-white backdrop-blur-md transition-all opacity-0 group-hover:opacity-100 shadow-md" title="Delete Photo">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
                         </div>
+
+                        <!-- Hover overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
-                    <div class="p-4 flex-1 flex flex-col justify-between">
+                    
+                    <div class="p-4 flex-1 flex items-center justify-between">
                         <div>
                             <h3 class="font-semibold text-slate-800 dark:text-slate-100 line-clamp-1 group-hover:text-sky-500 transition-colors">${photo.caption}</h3>
                             <p class="text-xs text-slate-400 dark:text-slate-500 mt-1"><i class="fa-regular fa-calendar text-xs mr-1"></i>${photo.date}</p>
                         </div>
+                        <button onclick="toggleLike(${photo.id}, event)" class="p-2 rounded-xl transition-colors ${photo.liked ? 'text-rose-500' : 'text-slate-300 dark:text-slate-600 hover:text-rose-400'}">
+                            <i class="${photo.liked ? 'fa-solid' : 'fa-regular'} fa-heart text-lg"></i>
+                        </button>
                     </div>
                 `;
 
@@ -374,7 +412,7 @@
             });
         }
 
-        // Category Filtering
+        // Filtering
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 filterBtns.forEach(b => {
@@ -390,13 +428,30 @@
             });
         });
 
-        // Search Input Event
+        // Search
         searchInput.addEventListener('input', (e) => {
             searchQuery = e.target.value;
             renderGallery();
         });
 
-        // Upload Modal Handlers
+        // Toggle Upload Source Tabs
+        tabFileUpload.addEventListener('click', () => {
+            uploadType = 'file';
+            tabFileUpload.className = 'flex-1 py-1.5 text-xs font-semibold rounded-lg bg-sky-500 text-white transition-all';
+            tabUrlUpload.className = 'flex-1 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 transition-all';
+            fileInputContainer.classList.remove('hidden');
+            urlInputContainer.classList.add('hidden');
+        });
+
+        tabUrlUpload.addEventListener('click', () => {
+            uploadType = 'url';
+            tabUrlUpload.className = 'flex-1 py-1.5 text-xs font-semibold rounded-lg bg-sky-500 text-white transition-all';
+            tabFileUpload.className = 'flex-1 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 transition-all';
+            urlInputContainer.classList.remove('hidden');
+            fileInputContainer.classList.add('hidden');
+        });
+
+        // Modal Controls
         function openModal() {
             uploadModal.classList.remove('hidden');
             setTimeout(() => {
@@ -427,8 +482,7 @@
         closeUploadBtn.addEventListener('click', closeModal);
         cancelUploadBtn.addEventListener('click', closeModal);
 
-        // Image Selection and Drop Zone
-        dropZone.addEventListener('click', () => imageInput.click());
+        fileInputContainer.addEventListener('click', () => imageInput.click());
 
         imageInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -444,21 +498,28 @@
             }
         });
 
-        // Form Submit
+        // Submit Form
         uploadForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const caption = document.getElementById('captionInput').value;
             const category = document.getElementById('categoryInput').value;
             const date = document.getElementById('dateInput').value;
 
-            const imageUrl = selectedImageData || 'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80';
+            let finalUrl = 'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80';
+
+            if (uploadType === 'file' && selectedImageData) {
+                finalUrl = selectedImageData;
+            } else if (uploadType === 'url' && imageUrlInput.value.trim() !== '') {
+                finalUrl = imageUrlInput.value.trim();
+            }
 
             const newPhoto = {
                 id: Date.now(),
-                url: imageUrl,
+                url: finalUrl,
                 caption: caption,
                 category: category,
-                date: date
+                date: date,
+                liked: false
             };
 
             photos.unshift(newPhoto);
@@ -510,7 +571,6 @@
             updateLightboxContent();
         });
 
-        // Keyboard Controls
         document.addEventListener('keydown', (e) => {
             if (!lightboxModal.classList.contains('hidden')) {
                 if (e.key === 'Escape') closeLightboxModal();
@@ -519,10 +579,7 @@
             }
         });
 
-        // Set Default Date in Form
         document.getElementById('dateInput').valueAsDate = new Date();
-
-        // Initial Render
         renderGallery();
     </script>
 </body>
